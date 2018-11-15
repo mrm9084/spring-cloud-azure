@@ -3,7 +3,6 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
 package com.example;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +26,5 @@ public class AzureConfigApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("remoteValue: " + remoteValue);
         System.out.println("localValue: " + localValue);
-
-        System.exit(0);
     }
 }
