@@ -27,7 +27,7 @@ public class AzureCloudConfigProperties {
     private static final String ENDPOINT_PREFIX = "endpoint=";
     private static final String ID_PREFIX = "id=";
     private static final String SECRET_PREFIX = "secret=";
-    private static final String NON_EMPTY_MSG = "%s property should not be null or empty in the connection string of " +
+    public static final String NON_EMPTY_MSG = "%s property should not be null or empty in the connection string of " +
             "Azure Config Service.";
 
     private boolean enabled = true;
@@ -55,6 +55,8 @@ public class AzureCloudConfigProperties {
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z0-9_@]+$")
     private String profileSeparator = "_";
+
+    private boolean failFast = true;
 
     // Values extracted from connection string
     private String endpoint;

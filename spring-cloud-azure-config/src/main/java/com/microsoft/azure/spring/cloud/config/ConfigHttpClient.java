@@ -19,6 +19,7 @@ import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -27,7 +28,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import static org.apache.commons.codec.digest.HmacAlgorithms.HMAC_SHA_256;
 import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
@@ -45,8 +45,9 @@ import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
 @Slf4j
 public class ConfigHttpClient {
     private static final String DATE_FORMAT = "EEE, d MMM yyyy hh:mm:ss z";
-
     private static final SimpleDateFormat GMT_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT);
+    public static final String USER_AGENT = String.format("AzconfigClient/%s/SpringCloud",
+            ConfigHttpClient.class.getPackage().getImplementationVersion());
 
     static {
         GMT_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -58,11 +59,11 @@ public class ConfigHttpClient {
         this.httpClient = httpClient;
     }
 
-    public CloseableHttpResponse execute(@NonNull HttpUriRequest request, String credential, String secret)
+    public CloseableHttpResponse execute(@NonNull HttpUriRequest request, Date date, String credential, String secret)
             throws IOException, URISyntaxException {
         Assert.notNull(request, "Request should not be null.");
 
-        Map<String, String> authHeaders = buildRequestHeaders(request, new Date(), credential, secret);
+        Map<String, String> authHeaders = buildRequestHeaders(request, date, credential, secret);
         authHeaders.forEach(request::setHeader);
 
         return httpClient.execute(request);
@@ -87,6 +88,8 @@ public class ConfigHttpClient {
         String authorization = String.format("HMAC-SHA256 Credential=%s, SignedHeaders=%s, Signature=%s",
                 credential, signedHeaders, signature);
         headers.put("Authorization", authorization);
+
+        headers.put(HttpHeaders.USER_AGENT, USER_AGENT);
 
         return headers;
     }
@@ -114,11 +117,13 @@ public class ConfigHttpClient {
         return encodeHmac(HMAC_SHA_256, decodedKey, toSign);
     }
 
+
+    // Extract request path and query params, e.g., https://example.com/abc?param=xyz -> /abc?param=xyz
     private static String getRequestPath(HttpRequest request) throws URISyntaxException {
         URIBuilder uri = new URIBuilder(request.getRequestLine().getUri());
-        String protocol = StringUtils.isEmpty(uri.getScheme()) ? "" : uri.getScheme() + ":";
+        String scheme = uri.getScheme() + "://";
 
-        return uri.toString().replaceFirst(protocol + "//", "").replaceFirst(uri.getHost(), "");
+        return uri.toString().substring(scheme.length()).substring(uri.getHost().length());
     }
 
     private static String getHost(HttpRequest request) throws URISyntaxException {
