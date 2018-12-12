@@ -82,6 +82,7 @@ public class AzureCloudConfigProperties {
 
     @PostConstruct
     public void validateAndInit() {
+        Assert.isTrue(labelIsLegal(label), "Label should not contain * or , character.");
         if (!StringUtils.hasText(connectionString)) {
             return;
         }
@@ -105,5 +106,13 @@ public class AzureCloudConfigProperties {
         Assert.hasText(this.endpoint, String.format(NON_EMPTY_MSG, "Endpoint"));
         Assert.hasText(this.id, String.format(NON_EMPTY_MSG, "Id"));
         Assert.hasText(this.secret, String.format(NON_EMPTY_MSG, "Secret"));
+    }
+
+    private boolean labelIsLegal(String label) {
+        if (StringUtils.hasText(label) && (label.contains("*") || label.contains(","))) {
+            return false;
+        }
+
+        return true;
     }
 }
