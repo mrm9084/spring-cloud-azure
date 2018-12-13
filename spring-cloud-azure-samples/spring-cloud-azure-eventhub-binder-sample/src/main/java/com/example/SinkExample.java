@@ -6,27 +6,28 @@
 
 package com.example;
 
-import com.microsoft.azure.spring.integration.core.AzureHeaders;
-import com.microsoft.azure.spring.integration.core.api.Checkpointer;
 import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Sink;
-import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.SubscribableChannel;
 
 /**
  * @author Warren Zhu
  */
-@EnableBinding(Sink.class)
+@EnableBinding(SinkExample.EventhubSink.class)
 public class SinkExample {
 
-    @StreamListener(Sink.INPUT)
-    public void handleMessage(String message, @Header(AzureHeaders.CHECKPOINTER) Checkpointer checkpointer) {
+    @StreamListener(EventhubSink.INPUT2)
+    public void handleMessage(String message) {
         System.out.println(String.format("New message received: '%s'", message));
-        checkpointer.success().handle((r, ex) -> {
-            if (ex == null) {
-                System.out.println(String.format("Message '%s' successfully checkpointed", message));
-            }
-            return null;
-        });
+    }
+
+    public interface EventhubSink {
+
+        String INPUT2 = "input2";
+
+        @Input(INPUT2)
+        SubscribableChannel input2();
+
     }
 }
