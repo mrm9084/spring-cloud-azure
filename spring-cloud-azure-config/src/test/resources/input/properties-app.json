@@ -1,0 +1,47 @@
+[
+  {
+    "key": "/foo/test.key",
+    "label": null,
+    "value": "app name foo test.key no label"
+  },
+  {
+    "key": "/foo/test.key",
+    "label": "v0",
+    "value": "app name foo test.key v0 label"
+  },
+  {
+    "key": "/foo/test.key",
+    "label": "v1",
+    "value": "app name foo test.key v1 label"
+  },
+  {
+    "key": "/config/foo/test.key",
+    "label": null,
+    "value": "prefixed app name foo test.key no label"
+  },
+  {
+    "key": "/config/foo/test.key",
+    "label": "v0",
+    "value": "prefixed app name foo test.key v0 label"
+  },
+  {
+    "key": "/config/foo/test.key",
+    "label": "v1",
+    "value": "prefixed app name foo test.key v1 label"
+  },
+  {
+    "key": "/foo_dev/test.key",
+    "label": null,
+    "value": "app name foo dev profile test.key no label"
+  },
+  {
+    "key": "/foo_dev/test.key",
+    "label": "v0",
+    "value": "app name foo dev profile test.key v0 label"
+  },
+  {
+    "key": "/foo_dev/test.key",
+    "label": "v1",
+    "value": "app name foo dev profile test.key v1 label"
+  }
+]

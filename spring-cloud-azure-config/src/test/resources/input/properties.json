@@ -1,0 +1,5 @@
+{
+  "/application/test.key": "my value1",
+  "/application_dev/test.key": "my value1 - dev",
+  "/application_prod/test.key": "my value1 - prod"
+}

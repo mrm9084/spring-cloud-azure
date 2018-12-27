@@ -1,0 +1,47 @@
+[
+  {
+    "key": "/application/test.key",
+    "label": null,
+    "value": "test.key no label"
+  },
+  {
+    "key": "/application/test.key",
+    "label": "v0",
+    "value": "test.key v0 label"
+  },
+  {
+    "key": "/application/test.key",
+    "label": "v1",
+    "value": "test.key v1 label"
+  },
+  {
+    "key": "/config/application/test.key",
+    "label": null,
+    "value": "prefixed test.key no label"
+  },
+  {
+    "key": "/config/application/test.key",
+    "label": "v0",
+    "value": "prefixed test.key v0 label"
+  },
+  {
+    "key": "/config/application/test.key",
+    "label": "v1",
+    "value": "prefixed test.key v1 label"
+  },
+  {
+    "key": "/application_dev/test.key",
+    "label": null,
+    "value": "prefixed test.key dev profile no label"
+  },
+  {
+    "key": "/application_dev/test.key",
+    "label": "v0",
+    "value": "prefixed test.key dev profile v0 label"
+  },
+  {
+    "key": "/application_dev/test.key",
+    "label": "v1",
+    "value": "prefixed test.key dev profile v1 label"
+  }
+]
