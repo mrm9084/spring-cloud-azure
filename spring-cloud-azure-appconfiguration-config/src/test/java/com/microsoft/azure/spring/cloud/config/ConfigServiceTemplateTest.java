@@ -100,7 +100,7 @@ public class ConfigServiceTemplateTest {
 
     @Test
     public void testKeysCanBeSearched() throws IOException, URISyntaxException {
-        when(configClient.execute(any(), any(), any(), any()))
+        when(configClient.execute(any(), any(), any()))
                 .thenReturn(new MockCloseableHttpResponse(OK_STATUS, okEntity));
         template = new ConfigServiceTemplate(configClient, pool);
 
@@ -121,7 +121,7 @@ public class ConfigServiceTemplateTest {
     }
 
     private void prepareConfigClient() throws IOException, URISyntaxException {
-        when(configClient.execute(any(), any(), any(), any())).thenAnswer(new Answer<CloseableHttpResponse>() {
+        when(configClient.execute(any(), any(), any())).thenAnswer(new Answer<CloseableHttpResponse>() {
             @Override
             public CloseableHttpResponse answer(InvocationOnMock invocation) throws Throwable {
                 // Extract label params from the request argument and filter result from the given testItems
@@ -153,7 +153,7 @@ public class ConfigServiceTemplateTest {
         expected.expect(IllegalStateException.class);
         expected.expectMessage(failureMsg);
 
-        when(configClient.execute(any(), any(), any(), any()))
+        when(configClient.execute(any(), any(), any()))
                 .thenReturn(new MockCloseableHttpResponse(FAIL_STATUS, null));
 
         template = new ConfigServiceTemplate(configClient, pool);
@@ -162,7 +162,7 @@ public class ConfigServiceTemplateTest {
 
     @Test
     public void notFoundReturnEmptyList() throws Exception {
-        when(configClient.execute(any(), any(), any(), any()))
+        when(configClient.execute(any(), any(), any()))
                 .thenReturn(new MockCloseableHttpResponse(NOT_FOUND_STATUS, null));
         template = new ConfigServiceTemplate(configClient, pool);
 
@@ -188,11 +188,11 @@ public class ConfigServiceTemplateTest {
         when(secondResponse.getStatusLine()).thenReturn(OK_STATUS);
         when(secondResponse.getEntity()).thenReturn(secondEntity);
 
-        when(configClient.execute(any(), any(), any(), any())).thenReturn(firstResponse).thenReturn(secondResponse);
+        when(configClient.execute(any(), any(), any())).thenReturn(firstResponse).thenReturn(secondResponse);
         template = new ConfigServiceTemplate(configClient, pool);
         List<KeyValueItem> result = template.getKeys(configStore.getName(), TEST_OPTIONS);
 
-        verify(configClient, times(2)).execute(any(), any(), any(), any());
+        verify(configClient, times(2)).execute(any(), any(), any());
         assertThat(result).isNotEmpty();
         assertThat(result.size()).isEqualTo(3);
         assertThat(result).containsExactlyInAnyOrder(item1, item2, item3);
@@ -214,14 +214,14 @@ public class ConfigServiceTemplateTest {
         when(secondResponse.getStatusLine()).thenReturn(OK_STATUS);
         when(secondResponse.getEntity()).thenReturn(entity);
 
-        when(configClient.execute(any(), any(), any(), any())).thenReturn(firstResponse).thenReturn(secondResponse);
+        when(configClient.execute(any(), any(), any())).thenReturn(firstResponse).thenReturn(secondResponse);
         template = new ConfigServiceTemplate(configClient, pool);
 
         long start = System.currentTimeMillis();
         List<KeyValueItem> result = template.getKeys(configStore.getName(), TEST_OPTIONS);
         long end = System.currentTimeMillis();
 
-        verify(configClient, times(2)).execute(any(), any(), any(), any());
+        verify(configClient, times(2)).execute(any(), any(), any());
         assertThat(result).isNotEmpty();
         assertThat(result.size()).isEqualTo(2);
         assertThat(result).containsExactlyInAnyOrder(item1, item2);
@@ -236,11 +236,11 @@ public class ConfigServiceTemplateTest {
         when(response.getStatusLine()).thenReturn(OK_STATUS);
         when(response.getEntity()).thenReturn(httpEntity);
 
-        when(configClient.execute(any(), any(), any(), any())).thenReturn(response);
+        when(configClient.execute(any(), any(), any())).thenReturn(response);
         template = new ConfigServiceTemplate(configClient, pool);
         List<KeyValueItem> result = template.getKeys(configStore.getName(), TEST_OPTIONS);
 
-        verify(configClient, times(1)).execute(any(), any(), any(), any());
+        verify(configClient, times(1)).execute(any(), any(), any());
         assertThat(result).isNotEmpty();
         assertThat(result.size()).isEqualTo(2);
         assertThat(result).containsExactlyInAnyOrder(item1, item2);
@@ -255,11 +255,11 @@ public class ConfigServiceTemplateTest {
         when(response.getStatusLine()).thenReturn(OK_STATUS);
         when(response.getEntity()).thenReturn(httpEntity);
 
-        when(configClient.execute(any(), any(), any(), any())).thenReturn(response);
+        when(configClient.execute(any(), any(), any())).thenReturn(response);
         template = new ConfigServiceTemplate(configClient, pool);
         List<KeyValueItem> result = template.getKeys(configStore.getName(), TEST_OPTIONS);
 
-        verify(configClient, times(1)).execute(any(), any(), any(), any());
+        verify(configClient, times(1)).execute(any(), any(), any());
         assertThat(result).isNotEmpty();
         assertThat(result.size()).isEqualTo(2);
         assertThat(result).containsExactlyInAnyOrder(item1, item2);

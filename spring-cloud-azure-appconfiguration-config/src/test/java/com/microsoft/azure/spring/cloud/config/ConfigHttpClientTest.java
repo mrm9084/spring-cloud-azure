@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.microsoft.azure.spring.cloud.config.TestConstants.TEST_ID;
@@ -36,7 +37,7 @@ import static org.mockito.Mockito.when;
 
 @PrepareForTest(ConfigHttpClient.class)
 public class ConfigHttpClientTest {
-    private static final String DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z";
+    private static final String DATE_FORMAT = DateTimeFormatter.RFC_1123_DATE_TIME.toFormat().toString();
     private static final SimpleDateFormat GMT_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT);
     private static final String TEST_USER_AGENT = ConfigHttpClient.USER_AGENT;
 
@@ -132,7 +133,7 @@ public class ConfigHttpClientTest {
             ConfigHttpClient configHttpClient = new ConfigHttpClient(httpClient);
 
             HttpGet httpGet = new HttpGet(new URI(TEST_KV_API));
-            configHttpClient.execute(httpGet, reqData.getDate(), TEST_ID, TEST_SECRET);
+            configHttpClient.execute(httpGet, TEST_ID, TEST_SECRET);
         }
     }
 

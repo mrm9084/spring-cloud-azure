@@ -27,6 +27,9 @@ import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.apache.commons.codec.digest.HmacAlgorithms.HMAC_SHA_256;
@@ -44,14 +47,9 @@ import static org.apache.commons.codec.digest.MessageDigestAlgorithms.SHA_256;
  */
 public class ConfigHttpClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigHttpClient.class);
-    private static final String DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss z";
-    private static final SimpleDateFormat GMT_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT);
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.RFC_1123_DATE_TIME.withLocale(Locale.US);
     public static final String USER_AGENT = String.format("AzconfigClient/%s/SpringCloud",
             ConfigHttpClient.class.getPackage().getImplementationVersion());
-
-    static {
-        GMT_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
 
     private final CloseableHttpClient httpClient;
 
@@ -59,19 +57,19 @@ public class ConfigHttpClient {
         this.httpClient = httpClient;
     }
 
-    public CloseableHttpResponse execute(@NonNull HttpUriRequest request, Date date, String credential, String secret)
+    public CloseableHttpResponse execute(@NonNull HttpUriRequest request, String credential, String secret)
             throws IOException, URISyntaxException {
         Assert.notNull(request, "Request should not be null.");
 
-        Map<String, String> authHeaders = buildRequestHeaders(request, date, credential, secret);
+        Map<String, String> authHeaders = buildRequestHeaders(request, credential, secret);
         authHeaders.forEach(request::setHeader);
 
         return httpClient.execute(request);
     }
 
-    private static Map<String, String> buildRequestHeaders(HttpUriRequest request, Date date, String credential,
+    private static Map<String, String> buildRequestHeaders(HttpUriRequest request, String credential,
             String secret) throws URISyntaxException, IOException {
-        String requestTime = GMT_DATE_FORMAT.format(date);
+        String requestTime = LocalDate.now().format(DATE_FORMAT);
         String contentHash = buildContentHash(request);
 
         // SignedHeaders

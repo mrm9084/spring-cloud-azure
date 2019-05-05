@@ -179,11 +179,10 @@ public class ConfigServiceTemplate implements ConfigServiceOperations {
                                                  QueryOptions options) {
         HttpGet httpGet = new HttpGet(requestUri);
         setRequestHeader(httpGet, options);
-        Date date = new Date();
 
         LOGGER.debug("Loading key-value items from Azure Config service at [{}].", requestUri);
         try {
-            CloseableHttpResponse response = configClient.execute(httpGet, date, connString.getId(),
+            CloseableHttpResponse response = configClient.execute(httpGet, connString.getId(),
                     connString.getSecret());
             int statusCode = response.getStatusLine().getStatusCode();
 
