@@ -9,7 +9,6 @@ import com.microsoft.azure.credentials.MSICredentials;
 import com.microsoft.azure.spring.cloud.config.managed.identity.AzureResourceManagerConnector;
 import com.microsoft.azure.spring.cloud.config.resource.ConnectionString;
 import com.microsoft.azure.spring.cloud.config.resource.ConnectionStringPool;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -49,16 +47,6 @@ public class AzureConfigBootstrapConfigurationTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-    }
-
-    @Test
-    public void closeableHttpClientBeanCreated() {
-        contextRunner.run(context -> assertThat(context).hasSingleBean(CloseableHttpClient.class));
-    }
-
-    @Test
-    public void configHttpClientBeanCreated() {
-        contextRunner.run(context -> assertThat(context).hasSingleBean(ConfigHttpClient.class));
     }
 
     @Test

@@ -5,7 +5,9 @@
  */
 package com.microsoft.azure.spring.cloud.config;
 
-import com.microsoft.azure.spring.cloud.config.domain.KeyValueItem;
+import com.azure.applicationconfig.models.ConfigurationSetting;
+import com.azure.applicationconfig.models.SettingFields;
+import com.azure.applicationconfig.models.SettingSelector;
 import com.microsoft.azure.spring.cloud.config.domain.QueryOptions;
 import org.springframework.core.env.EnumerablePropertySource;
 
@@ -43,12 +45,13 @@ public class AzureConfigPropertySource extends EnumerablePropertySource<ConfigSe
 
     public void initProperties() {
         // * for wildcard match
-        QueryOptions queryOptions = new QueryOptions().withKeyNames(context + "*").withLabels(label);
-        List<KeyValueItem> items = source.getKeys(storeName, queryOptions);
+        SettingSelector selector = new SettingSelector().keys(context + "*").labels(label);
+        QueryOptions queryOptions = new QueryOptions().withSelector(selector).withSortField(SettingFields.LABEL);
+        List<ConfigurationSetting> items = source.getKeys(storeName, queryOptions);
 
-        for (KeyValueItem item : items) {
-            String key = item.getKey().trim().substring(context.length()).replace('/', '.');
-            properties.put(key, item.getValue());
+        for (ConfigurationSetting item : items) {
+            String key = item.key().trim().substring(context.length()).replace('/', '.');
+            properties.put(key, item.value());
         }
     }
 }

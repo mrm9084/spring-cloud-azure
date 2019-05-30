@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class ConnectionString {
     private static final String CONN_STRING_REGEXP = "Endpoint=([^;]+);Id=([^;]+);Secret=([^;]+)";
+    private static final String CONN_STRING_FORMAT = "Endpoint=%s;Id=%s;Secret=%s";
     public static final String ENDPOINT_ERR_MSG = String.format("Connection string does not follow format %s.",
             CONN_STRING_REGEXP);
     private static final Pattern CONN_STRING_PATTERN = Pattern.compile(CONN_STRING_REGEXP);
@@ -57,5 +58,10 @@ public class ConnectionString {
 
     public String getSecret() {
         return secret;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(CONN_STRING_FORMAT, this.endpoint, this.id, this.secret);
     }
 }

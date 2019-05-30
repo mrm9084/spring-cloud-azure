@@ -5,8 +5,10 @@
  */
 package com.microsoft.azure.spring.cloud.config;
 
-import com.microsoft.azure.spring.cloud.config.domain.KeyValueItem;
-import com.microsoft.azure.spring.cloud.config.domain.QueryField;
+import com.azure.applicationconfig.models.ConfigurationSetting;
+import com.azure.applicationconfig.models.Range;
+import com.azure.applicationconfig.models.SettingFields;
+import com.azure.applicationconfig.models.SettingSelector;
 import com.microsoft.azure.spring.cloud.config.domain.QueryOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,15 +105,21 @@ public class AzureCloudConfigWatch implements ApplicationEventPublisherAware, Sm
 
     private boolean needRefresh(ConfigStore store) {
         String watchedKeyNames = watchedKeyNames(store, storeContextsMap);
-        QueryOptions options = new QueryOptions().withKeyNames(watchedKeyNames)
-                .withLabels(store.getLabels()).withFields(QueryField.ETAG).withRange(0, 0);
 
-        List<KeyValueItem> keyValueItems = configOperations.getRevisions(store.getName(), options);
+        int labelSize = store.getLabels() != null ? store.getLabels().size() : 0;
+        String[] labelArray = new String[labelSize];
+        store.getLabels().toArray(labelArray);
+
+        SettingSelector selector = new SettingSelector().fields(SettingFields.ETAG)
+                .keys(watchedKeyNames).labels(labelArray).range(new Range(0, 0));
+        QueryOptions options = new QueryOptions().withSelector(selector);
+
+        List<ConfigurationSetting> keyValueItems = configOperations.getRevisions(store.getName(), options);
         if (keyValueItems.isEmpty()) {
             return false;
         }
 
-        String etag = keyValueItems.get(0).getEtag();
+        String etag = keyValueItems.get(0).etag();
         if (firstTimeMap.get(store.getName()) == null) {
             storeEtagMap.put(store.getName(), etag);
             firstTimeMap.put(store.getName(), false);

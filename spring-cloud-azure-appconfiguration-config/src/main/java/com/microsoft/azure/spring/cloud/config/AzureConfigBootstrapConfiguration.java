@@ -14,8 +14,6 @@ import com.microsoft.azure.spring.cloud.config.managed.identity.AzureManagedIden
 import com.microsoft.azure.spring.cloud.config.managed.identity.AzureResourceManagerConnector;
 import com.microsoft.azure.spring.cloud.config.resource.ConnectionString;
 import com.microsoft.azure.spring.cloud.config.resource.ConnectionStringPool;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -90,26 +88,18 @@ public class AzureConfigBootstrapConfiguration {
         return credentials;
     }
 
-    @Bean
-    public CloseableHttpClient closeableHttpClient() {
-        return HttpClients.createDefault();
-    }
-
-    @Bean
-    public ConfigHttpClient httpClient(CloseableHttpClient httpClient) {
-        return new ConfigHttpClient(httpClient);
-    }
-
-    @Bean
-    public ConfigServiceOperations azureConfigOperations(ConfigHttpClient client, ConnectionStringPool pool) {
-        return new ConfigServiceTemplate(client, pool);
-    }
 
     @Bean
     public AzureConfigPropertySourceLocator sourceLocator(ConfigServiceOperations operations,
                                                           AzureCloudConfigProperties properties) {
         return new AzureConfigPropertySourceLocator(operations, properties);
     }
+
+    @Bean
+    public ConfigServiceOperations azureConfigOperations(ConnectionStringPool pool) {
+        return new ConfigServiceTemplate(pool);
+    }
+
 
     @PostConstruct
     public void collectTelemetry() {

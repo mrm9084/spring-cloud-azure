@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.cloud.config;
 
-import com.microsoft.azure.spring.cloud.config.domain.KeyValueItem;
+import com.azure.applicationconfig.models.ConfigurationSetting;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,7 +66,7 @@ public class AzureConfigCloudWatchTest {
 
     @Test
     public void firstCallShouldNotPublishEvent() {
-        List<KeyValueItem> mockResponse = initialResponse();
+        List<ConfigurationSetting> mockResponse = initialResponse();
         when(configOperations.getRevisions(any(), any())).thenReturn(mockResponse);
         watch.start();
         watch.watchConfigKeyValues();
@@ -75,27 +75,27 @@ public class AzureConfigCloudWatchTest {
 
     @Test
     public void updatedEtagShouldPublishEvent() throws InterruptedException {
-        List<KeyValueItem> mockResponse = initialResponse();
+        List<ConfigurationSetting> mockResponse = initialResponse();
         when(configOperations.getRevisions(any(), any())).thenReturn(mockResponse);
         watch.start();
         watch.watchConfigKeyValues();
 
-        List<KeyValueItem> updatedResponse = updatedResponse();
+        List<ConfigurationSetting> updatedResponse = updatedResponse();
         when(configOperations.getRevisions(any(), any())).thenReturn(updatedResponse);
         Thread.sleep(properties.getWatch().getDelay().getSeconds() * 1000 * 2);
         verify(eventPublisher, times(1)).publishEvent(any(RefreshEvent.class));
     }
 
-    private List<KeyValueItem> initialResponse() {
-        KeyValueItem item = new KeyValueItem();
-        item.setEtag("fake-etag");
+    private List<ConfigurationSetting> initialResponse() {
+        ConfigurationSetting item = new ConfigurationSetting();
+        item.etag("fake-etag");
 
         return Arrays.asList(item);
     }
 
-    private List<KeyValueItem> updatedResponse() {
-        KeyValueItem item = new KeyValueItem();
-        item.setEtag("fake-etag-updated");
+    private List<ConfigurationSetting> updatedResponse() {
+        ConfigurationSetting item = new ConfigurationSetting();
+        item.etag("fake-etag-updated");
 
         return Arrays.asList(item);
     }

@@ -162,6 +162,11 @@
                 <artifactId>azure-keyvault</artifactId>
                 <version>${azure.keyvault.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-app-configuration</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
 
             <!--Spring Cloud Azure Starters-->
             <dependency>

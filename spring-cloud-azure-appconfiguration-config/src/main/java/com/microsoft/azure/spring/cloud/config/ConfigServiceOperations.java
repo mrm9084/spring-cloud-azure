@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.cloud.config;
 
-import com.microsoft.azure.spring.cloud.config.domain.KeyValueItem;
+import com.azure.applicationconfig.models.ConfigurationSetting;
 import com.microsoft.azure.spring.cloud.config.domain.QueryOptions;
 import org.springframework.lang.NonNull;
 
@@ -20,16 +20,16 @@ public interface ConfigServiceOperations {
      *
      * @param storeName the store name against which to query
      * @param queryOptions the options used to query the keys
-     * @return all key-value items {@link List< KeyValueItem >} which match given condition, result is sorted by the
-     * order of the labels defined in {@code queryOptions}
+     * @return all key-value items {@link List< ConfigurationSetting >} which match given condition,
+     * result is sorted by the order of the labels defined in {@code queryOptions}
      */
-    List<KeyValueItem> getKeys(@NonNull String storeName, @NonNull QueryOptions queryOptions);
+    List<ConfigurationSetting> getKeys(@NonNull String storeName, @NonNull QueryOptions queryOptions);
 
     /**
      * List chronological/historical representation of KeyValue resource(s)
      * @param storeName the store name against which to query
      * @param queryOptions the options used to query the keys
-     * @return all key-value items {@link List< KeyValueItem >} which match given condition
+     * @return all key-value items {@link List< ConfigurationSetting >} which match given condition
      */
-    List<KeyValueItem> getRevisions(@NonNull String storeName, @NonNull QueryOptions queryOptions);
+    List<ConfigurationSetting> getRevisions(@NonNull String storeName, @NonNull QueryOptions queryOptions);
 }
