@@ -95,7 +95,7 @@ spring.cloud.azure.appconfiguration.stores[0].label=[my-label1], [my-label2]
 
 Multiple labels can be separated with comma, if duplicate keys exists for multiple labels, the last label has highest priority.
 
-If you want to load configurations with *(No Label)* in addition to other labels leave an empty comma.
+If you want to load configurations with *(No Label)* in addition to other labels use an empty comma.
 
 ```properties
 spring.cloud.azure.appconfiguration.stores[0].label=,[my-label1]
