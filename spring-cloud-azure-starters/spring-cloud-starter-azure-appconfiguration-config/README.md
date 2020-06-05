@@ -95,6 +95,26 @@ spring.cloud.azure.appconfiguration.stores[0].label=[my-label1], [my-label2]
 
 Multiple labels can be separated with comma, if duplicate keys exists for multiple labels, the last label has highest priority.
 
+If you want to load configurations with *(No Label)* in addition to other labels leave an empty comma.
+
+```properties
+spring.cloud.azure.appconfiguration.stores[0].label=,[my-label1]
+spring.cloud.azure.appconfiguration.stores[1].label=[my-label2],
+spring.cloud.azure.appconfiguration.stores[2].label=[my-label1],,[my-label2]
+```
+
+In YAML files to use an empty comma at the start but the label in single quotes.
+
+```yml
+spring:
+  cloud:
+    azure:
+      appconfiguration:
+        stores:
+          -
+            label: ',dev'
+```
+
 ### Spring Profiles
 
 Spring Profiles are supported by setting labels on your configurations that match your profile. Then set your label on your config store:
